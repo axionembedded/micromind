@@ -1,2 +1,2 @@
 tb.v
-tinymind.v
+micromind.v

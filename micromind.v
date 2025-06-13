@@ -20,29 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-module tb;
+module micromind(out, clk, reset);
 
-  /* Make a reset that pulses once. */
-  reg reset = 0;
-  initial begin
-    $dumpfile("micromind.vcd");
-    $dumpvars(0, tb);
+  parameter WIDTH = 8;
 
-     # 17 reset = 1;
-     # 11 reset = 0;
-     # 29 reset = 1;
-     # 11 reset = 0;
-     # 100 $finish;
-  end
+  output [WIDTH-1 : 0] out;
+  input              clk, reset;
 
-  /* Make a regular pulsing clock. */
-  reg clk = 0;
-  always #5 clk = !clk;
+  reg [WIDTH-1 : 0]   out;
+  wire               clk, reset;
 
-  wire [7:0] value;
-  micromind c1 (value, clk, reset);
+  always @(posedge clk or posedge reset)
+    if (reset)
+      out <= 0;
+    else
+      out <= out + 1;
 
-  initial
-     $monitor("At time %t, value = %h (%0d)",
-              $time, value, value);
-endmodule //tb 
+endmodule // micromind

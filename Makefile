@@ -1,11 +1,11 @@
 
 comp:
-	iverilog -o tb -c testbench_srclist.txt
+	iverilog -o micromind -c testbench_srclist.txt
 
 run:
-	vvp -v tb
+	vvp -v micromind
 
 all: comp run
 
 gtkwave:
-	gtkwave tb.vcd
+	gtkwave micromind.vcd
