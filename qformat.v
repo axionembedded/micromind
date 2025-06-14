@@ -24,7 +24,7 @@ module qformat #(parameter NUM_FIXED_BITS = 8);
     reg signed [NUM_FIXED_BITS:0] value;
     reg signed [((2*NUM_FIXED_BITS) - 1):0] product;
     
-    localparam  POW = 2.0**(NUM_FIXED_BITS - 1);
+    localparam  POW = 2.0**NUM_FIXED_BITS;
 
     initial begin
         $display("QFormat module placeholder");
