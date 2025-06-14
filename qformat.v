@@ -20,6 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-module qformat;
-    initial $display("QFormat module placeholder");
+module qformat #(parameter NUM_FIXED_BITS = 8);
+    reg signed [NUM_FIXED_BITS:0] value;
+    reg signed [((2*NUM_FIXED_BITS) - 1):0] product;
+    
+    localparam  POW = 2.0**(NUM_FIXED_BITS - 1);
+
+    initial begin
+        $display("QFormat module placeholder");
+    end
 endmodule
