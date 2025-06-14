@@ -20,29 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-module micromind_tb;
-
-  /* Make a reset that pulses once. */
-  reg reset = 0;
-  initial begin
-    $dumpfile("micromind.vcd");
-    $dumpvars(0, micromind_tb);
-
-     # 17 reset = 1;
-     # 11 reset = 0;
-     # 29 reset = 1;
-     # 11 reset = 0;
-     # 100 $finish;
-  end
-
-  /* Make a regular pulsing clock. */
-  reg clk = 0;
-  always #5 clk = !clk;
-
-  wire [7:0] value;
-  micromind c1 (value, clk, reset);
-
-  initial
-     $monitor("At time %t, value = %h (%0d)",
-              $time, value, value);
-endmodule //tb 
+module qformat;
+    initial $display("QFormat module placeholder");
+endmodule

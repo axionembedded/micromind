@@ -20,13 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-module micromind_tb;
+module qformat_tb;
 
   /* Make a reset that pulses once. */
   reg reset = 0;
   initial begin
-    $dumpfile("micromind.vcd");
-    $dumpvars(0, micromind_tb);
+    $dumpfile("qformat.vcd");
+    $dumpvars(0, qformat_tb);
 
      # 17 reset = 1;
      # 11 reset = 0;
@@ -40,7 +40,7 @@ module micromind_tb;
   always #5 clk = !clk;
 
   wire [7:0] value;
-  micromind c1 (value, clk, reset);
+//   micromind c1 (value, clk, reset);
 
   initial
      $monitor("At time %t, value = %h (%0d)",
