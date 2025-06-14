@@ -20,13 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-module qformat #(parameter NUM_FIXED_BITS = 8);
-    reg signed [NUM_FIXED_BITS:0] value;
-    reg signed [((2*NUM_FIXED_BITS) - 1):0] product;
-    
-    localparam  POW = 2.0**(-1.0 * NUM_FIXED_BITS);
+module signed_qformat_tb;
 
-    initial begin
-        $display("QFormat module placeholder");
-    end
-endmodule
+  /* Make a reset that pulses once. */
+  reg reset = 0;
+  initial begin
+    $dumpfile("signed_qformat.vcd");
+    $dumpvars(0, signed_qformat_tb);
+
+     # 17 reset = 1;
+     # 11 reset = 0;
+     # 29 reset = 1;
+     # 11 reset = 0;
+     # 100 $finish;
+  end
+
+  /* Make a regular pulsing clock. */
+  reg clk = 0;
+  always #5 clk = !clk;
+
+  wire [7:0] value;
+//   micromind c1 (value, clk, reset);
+
+  initial
+     $monitor("At time %t, value = %h (%0d)",
+              $time, value, value);
+endmodule //signed_qformat_tb 
