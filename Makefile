@@ -1,13 +1,13 @@
 
-comp:
-	iverilog -o micromind -c testbench_srclist.txt
+comp_micromind:
+	iverilog -o micromind -c micromind_srclist.txt
 
-run:
+run_micromind:
 	vvp -v micromind
 
-all: comp run
+all_micromind: comp_micromind run_micromind
 
-gtkwave:
+gtkwave_micromind:
 	gtkwave micromind.vcd &
 
 .PHONY: clean
