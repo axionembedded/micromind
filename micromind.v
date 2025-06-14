@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 module micromind(out, clk, reset);
-  `include "parameters.vh"
+  `include "micromind_vh/micromind_params.vh"
 
   output [WIDTH-1 : 0] out;
   input              clk, reset;
