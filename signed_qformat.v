@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-module qformat #(parameter NUM_FIXED_BITS = 8, NUM_FRACTIONAL_BITS = 8)
+module signed_qformat #(parameter NUM_FIXED_BITS = 8, NUM_FRACTIONAL_BITS = 8)
     (
         input clock, reset,
         output signed [NUM_FIXED_BITS + NUM_FRACTIONAL_BITS - 1:0] qvalue
