@@ -49,7 +49,7 @@ module q_format #(
             2'b00: result = a + b; // Addition
             2'b01: result = a - b; // Subtraction
             2'b10: result = mul_result; // Multiplication
-            2'b11: result = (b != 0) ? div_temp / b : 0; // Division
+            2'b11: result = (b != 0) ? div_temp / b : 0; // Division. Divide by 0 results in 0 to match current ARM A64 architecture behavior.
             default: result = 0;
         endcase
     end
@@ -58,7 +58,7 @@ module q_format #(
     assign mul_temp = a * b;
     assign mul_result = mul_temp >>> FRACTIONAL_BITS;
 
-    // Division: (a << FRACTIONAL_BITS) / b
+    // Division: (a << FRACTIONAL_BITS) / b. this is an arithmetic trick to ensure we maintain the fractional bits in the result.
     assign div_temp = a <<< FRACTIONAL_BITS;
 
 endmodule
