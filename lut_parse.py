@@ -84,7 +84,7 @@ if __name__ == "__main__":
         pyplot.show()
     elif args.output == 1:
         print("Generating Verilog module for LUT values")
-        fileName = '%s_%d_%d.v' % (activationFn, fixedBits, fractionalBits)
+        fileName = '%s_%d_%d_lut.v' % (activationFn, fixedBits, fractionalBits)
         with open(fileName, 'w') as f:
             f.write('// Verilog module for %s activation function LUT with Q%d.%d\n' % (activationFn, fixedBits, fractionalBits))
             f.write('module %s_%d_%d_lut(\n' % (activationFn, fixedBits, fractionalBits))
