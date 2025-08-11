@@ -25,7 +25,7 @@
 
 `include "q_format.v"
 
-module Neuron #(
+module neuron #(
     parameter FIXED_BITS = 8,
     parameter FRACTIONAL_BITS = 8,
     parameter NUM_OUTPUTS = 1

@@ -3,7 +3,7 @@
 
 `include "q_format.v"
 
-module Connection #(
+module connection #(
     parameter FIXED_BITS = 8,
     parameter FRACTIONAL_BITS = 8
 )(
