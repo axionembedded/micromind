@@ -1,48 +1,93 @@
-// MIT License
+// test_q_format.v
+`timescale 1ns/1ps
 
-// Copyright (c) 2025 Axion Embedded
+module test_q_format;
 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+    // Parameters
+    localparam FIXED_BITS = 8;
+    localparam FRACTIONAL_BITS = 8;
+    localparam WIDTH = FIXED_BITS + FRACTIONAL_BITS;
 
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+    // Inputs
+    reg signed [WIDTH-1:0] a, b;
+    reg [1:0] op;
+    wire signed [WIDTH-1:0] result;
 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+    // Instantiate the q_format module
+    q_format #(
+        .FIXED_BITS(FIXED_BITS),
+        .FRACTIONAL_BITS(FRACTIONAL_BITS)
+    ) uut (
+        .a(a),
+        .b(b),
+        .op(op),
+        .result(result)
+    );
 
-module signed_qformat_tb;
+    // Helper function to convert real to Q format
+    function [WIDTH-1:0] real_to_q;
+        input real val;
+        real scaled;
+        begin
+            scaled = val * (1 << FRACTIONAL_BITS);
+            real_to_q = $rtoi(scaled);
+        end
+    endfunction
 
-  /* Make a reset that pulses once. */
-  reg reset = 0;
-  initial begin
-    $dumpfile("signed_qformat.vcd");
-    $dumpvars(0, signed_qformat_tb);
+    // Helper function to convert Q format to real
+    function real q_to_real;
+        input [WIDTH-1:0] val;
+        begin
+            q_to_real = $itor(val) / (1 << FRACTIONAL_BITS);
+        end
+    endfunction
 
-     # 17 reset = 1;
-     # 11 reset = 0;
-     # 29 reset = 1;
-     # 11 reset = 0;
-     # 100 $finish;
-  end
+    initial begin
+        $display("Q-format Arithmetic Testbench");
 
-  /* Make a regular pulsing clock. */
-  reg clk = 0;
-  always #5 clk = !clk;
+        // Test addition: 1.5 + 2.25 = 3.75
+        a = real_to_q(1.5);
+        b = real_to_q(2.25);
+        op = 2'b00;
+        #10;
+        $display("ADD: %f + %f = %f (Q: %h)", q_to_real(a), q_to_real(b), q_to_real(result), result);
 
-  wire [7:0] value;
-//   micromind c1 (value, clk, reset);
+        // Test subtraction: 5.5 - 2.25 = 3.25
+        a = real_to_q(5.5);
+        b = real_to_q(2.25);
+        op = 2'b01;
+        #10;
+        $display("SUB: %f - %f = %f (Q: %h)", q_to_real(a), q_to_real(b), q_to_real(result), result);
 
-  initial
-     $monitor("At time %t, value = %h (%0d)",
-              $time, value, value);
-endmodule //signed_qformat_tb 
+        // Test multiplication: 1.5 * 2.0 = 3.0
+        a = real_to_q(1.5);
+        b = real_to_q(2.0);
+        op = 2'b10;
+        #10;
+        $display("MUL: %f * %f = %f (Q: %h)", q_to_real(a), q_to_real(b), q_to_real(result), result);
+
+        // Test division: 3.0 / 1.5 = 2.0
+        a = real_to_q(3.0);
+        b = real_to_q(1.5);
+        op = 2'b11;
+        #10;
+        $display("DIV: %f / %f = %f (Q: %h)", q_to_real(a), q_to_real(b), q_to_real(result), result);
+
+        // Test divide by zero: 3.0 / 0 = 0
+        a = real_to_q(3.0);
+        b = 0;
+        op = 2'b11;
+        #10;
+        $display("DIV: %f / 0 = %f (Q: %h)", q_to_real(a), q_to_real(result), result);
+
+        // Test negative numbers: -2.5 + 1.0 = -1.5
+        a = real_to_q(-2.5);
+        b = real_to_q(1.0);
+        op = 2'b00;
+        #10;
+        $display("ADD: %f + %f = %f (Q: %h)", q_to_real(a), q_to_real(b), q_to_real(result), result);
+
+        $display("Testbench completed.");
+        $finish;
+    end
+endmodule
