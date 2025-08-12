@@ -23,3 +23,5 @@ module gradient #(
         end else if (set_en) begin
             value <= set_gradient;
         end
+    end
+endmodule
