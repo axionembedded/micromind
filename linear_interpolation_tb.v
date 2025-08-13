@@ -58,3 +58,8 @@ module linear_interpolation_tb;
         x  = 16'd10;
         #10;
         $display("Test 6: x=%d, y=%d (Expected: 50)", x, y);
+
+        $finish;
+    end
+
+endmodule
