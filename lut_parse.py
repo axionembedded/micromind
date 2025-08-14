@@ -5,16 +5,17 @@ import ctypes
 import matplotlib.pyplot as pyplot
 
 if __name__ == "__main__":
-    lutFilePath = r'lookupTables.cpp'
-    assert(os.path.exists(lutFilePath))
     supportedFns = ['tanh', 'log', 'sigmoid', 'exp']
     supportedTotalBits = [8,16,32,64]
     values = []
     parser = argparse.ArgumentParser(prog='LUT Parser', description='Parse and plot activation function LUT(s)')
+    parser.add_argument('-p', '--path', dest='lutFilePath', type=str, help='Path to the lookupTables.cpp file located in the tinymind repo.')
     parser.add_argument('-f', '--function', dest='function', type=str, help='Specify an activation function (e.g., tanh, etc.).')
     parser.add_argument('-q', '--qformat', dest='qformat', type=str, help='Specify Q-format to parse and plot (e.g., 8.8, 24.8, 2.7, etc.).')
     parser.add_argument('-o', '--output', dest='output', type=int, help='Specify Q-format output. 0 == plot, 1 == verilog module.', default=0)
     args = parser.parse_args()
+
+    assert(os.path.exists(args.lutFilePath))
 
     activationFn = args.function
     if not activationFn in supportedFns:
@@ -33,14 +34,14 @@ if __name__ == "__main__":
         [print(value) for value in supportedTotalBits]
         sys.exit(-1)
 
-    print('Parsing values from %s' % lutFilePath)
+    print('Parsing values from %s' % args.lutFilePath)
     print("Parsing the %s activation function for Q%d.%d" % (activationFn, fixedBits, fractionalBits))
     buildSwitch = "TINYMIND_USE_%s_%d_%d" % (activationFn.upper(), int(qformatSplit[0]), int(qformatSplit[1]))
     print("Build switch: %s" % buildSwitch)
     searchString = "#if %s" % buildSwitch
     found= False
     parse = False
-    with open(lutFilePath, 'r') as f:
+    with open(args.lutFilePath, 'r') as f:
         for line in f.readlines():
             if not found:
                 if searchString in line:
